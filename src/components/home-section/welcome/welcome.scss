@@ -33,6 +33,10 @@
             height: 915px;
             width: 915px;
             overflow: hidden;
+
+            canvas {
+                display: block;
+            }
         }
     }
 }

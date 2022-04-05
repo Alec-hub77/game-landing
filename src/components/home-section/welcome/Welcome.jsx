@@ -19,8 +19,41 @@ const champImgs = [champAshe, champAhri, champGaren]
 const Welcome = (props) => {
 
     useEffect(() => {
-        const welcomImgs = document.querySelectorAll('#welcome__img__slide')
-    },[])
+        const welcomeImgs = document.querySelectorAll('#welcome__img__slide > img')
+        let animates = []
+        welcomeImgs.forEach((item, index) => {
+            let nextImg = welcomeImgs[index === welcomeImgs.length - 1 ? 0 : index + 1].getAttribute('src')
+            let animation = new hoverEffect({
+                parent: document.querySelector('#welcome__img__slide'),
+                intensity: 0.5,
+                image1: item.getAttribute('src'),
+                image2: nextImg,
+                displacementImage: distortion,
+                hover: false
+            })
+            animates.push(animation)
+        })
+        welcomeImgs.forEach(e => e.remove())
+
+        let currItem = 0
+
+        const autoImageSlide = () => {
+            let prevItem = currItem
+            currItem = (currItem + 1) % animates.length
+
+            if (!document.hidden) {
+                animates[prevItem].next()
+            }
+
+            setTimeout(() => {
+                let canvas = document.querySelectorAll('#welcome__img__slide > canvas')
+                document.querySelector('#welcome__img__slide').appendChild(canvas[0])
+                animates[prevItem].previous()
+            }, 3000);
+        }
+
+        setInterval(autoImageSlide, 3000);
+    }, [])
 
   return (
     <HomeSection 
